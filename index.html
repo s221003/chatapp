@@ -101,13 +101,11 @@
     // メッセージを表示する関数
     function displayMessages() {
         chat.innerHTML = ''; // クリア
-        database.ref('messages/').on('value', (snapshot) => {
-            const messages = snapshot.val() || {};
-            Object.values(messages).forEach(msg => {
-                const messageElement = document.createElement('p');
-                messageElement.innerHTML = `<strong>学生:</strong> ${msg}`;
-                chat.appendChild(messageElement);
-            });
+        database.ref('messages/').on('child_added', (snapshot) => { // 'child_added'に変更
+            const msg = snapshot.val();
+            const messageElement = document.createElement('p');
+            messageElement.innerHTML = `<strong>学生:</strong> ${msg}`;
+            chat.appendChild(messageElement);
             chat.scrollTop = chat.scrollHeight; // スクロールを最新メッセージに移動
         });
     }
